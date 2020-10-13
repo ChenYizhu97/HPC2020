@@ -27,6 +27,7 @@ void square_dgemm (int n, double* A, double* B, double* C)
 
 
   /* For each row i of Blocked C */
+  # pragma omp parallel for
   for (int ii = 0; ii < n; ii += BLOCK_SIZE)
     /* For each column j of Blocked C */
     for (int jj = 0; jj < n; jj += BLOCK_SIZE) 
@@ -39,7 +40,7 @@ void square_dgemm (int n, double* A, double* B, double* C)
           for (int  j= jj; j < (jj+BLOCK_SIZE < n ? jj+BLOCK_SIZE:n); ++j)
           {
             double cij = 0;
-            for (int  k = kk; k < (kk+BLOCK_SIZE < n ? kk+BLOCK_SIZE:n); ++k)
+            for (int k = kk; k < (kk+BLOCK_SIZE < n ? kk+BLOCK_SIZE:n); ++k)
               cij += A[i+k*n]*B[k+j*n];
             C[i+j*n] += cij;
           }
