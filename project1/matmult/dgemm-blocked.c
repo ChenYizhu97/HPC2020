@@ -26,13 +26,14 @@ void square_dgemm (int n, double* A, double* B, double* C)
   int BLOCK_SIZE = 16;
 
 
-  /* For each row i of Blocked C */
+  /* the old implementation whose best average percentage of Peak is 6.46 with BLOCK_SIZE = 32
+  // For each row i of Blocked C 
   # pragma omp parallel for
   for (int ii = 0; ii < n; ii += BLOCK_SIZE)
-    /* For each column j of Blocked C */
+    // For each column j of Blocked C 
     for (int jj = 0; jj < n; jj += BLOCK_SIZE) 
     {  
-      /* Compute block C(i,j) */
+      // Compute each block C(i,j) 
       for (int kk = 0; kk < n; kk += BLOCK_SIZE)     
       {
         for (int i = ii; i < (ii+BLOCK_SIZE < n ? ii+BLOCK_SIZE:n); ++i)
@@ -47,4 +48,25 @@ void square_dgemm (int n, double* A, double* B, double* C)
         }
       }
     }
+    */
+  
+  // another implementation whose best average percentage of Peak is 6.64 with BLOCK_SIZE = 32
+  # pragma omp parallel for
+  for (int kk = 0; kk < n; kk += BLOCK_SIZE)
+  {
+    for (int ii = 0; ii < n; ii += BLOCK_SIZE)
+    {
+      for (int j = 0; j < n; j++)
+      {
+        for (int k = kk; k < (kk+BLOCK_SIZE < n ? kk+BLOCK_SIZE : n); k++)
+        {
+          double r = B[k+n*j];
+          for (int i = ii; i < (ii+BLOCK_SIZE < n ? ii+BLOCK_SIZE : n); i++)
+          {
+            C[i+j*n] += A[i+k*n] * r;
+          }
+        }
+      }
+    }
+  }
 }
