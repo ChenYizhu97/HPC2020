@@ -20,12 +20,13 @@ for (i=0; i < N; i++)
   a[i] = b[i] = i * 1.0;
 chunk = CHUNKSIZE;
 
-#pragma omp parallel for     \
+// #pragma omp for should be followed by for loop.
+#pragma omp parallel    \
   shared(a,b,c,chunk)            \
-  private(i,tid)             \
-  schedule(static,chunk)
+  private(i,tid)             
   {
   tid = omp_get_thread_num();
+  #pragma omp for schedule(static,chunk)
   for (i=0; i < N; i++)
     {
     c[i] = a[i] + b[i];

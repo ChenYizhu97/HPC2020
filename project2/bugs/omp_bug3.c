@@ -80,6 +80,7 @@ void print_results(float array[N], int tid, int section)
     printf("\n");
   } /*** end of critical ***/
 
+  // If there are more than 2 threads, the other threads cant access to this barrier, the program get stuck.
   #pragma omp barrier
   printf("Thread %d done and synchronized.\n", tid); 
 

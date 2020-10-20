@@ -35,6 +35,7 @@ omp_init_lock(&lockb);
   printf("Thread %d starting...\n", tid);
   #pragma omp barrier
 
+  // should unlock after writing.
   #pragma omp sections nowait
     {
     #pragma omp section

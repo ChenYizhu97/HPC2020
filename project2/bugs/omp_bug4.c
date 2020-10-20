@@ -13,6 +13,8 @@ int main (int argc, char *argv[])
 int nthreads, tid, i, j;
 double a[N][N];
 
+// the stack size limit is too small
+
 /* Fork a team of threads with explicit variable scoping */
 #pragma omp parallel shared(nthreads) private(i,j,tid,a)
   {
@@ -30,7 +32,7 @@ double a[N][N];
   for (i=0; i<N; i++)
     for (j=0; j<N; j++)
       a[i][j] = tid + i + j;
-
+  
   /* For confirmation */
   printf("Thread %d done. Last element= %f\n",tid,a[N-1][N-1]);
 

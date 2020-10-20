@@ -41,9 +41,21 @@ int main()
     time_start = wall_time();
 
     // TODO Parallelize the histogram computation
-    for(long i = 0; i < VEC_SIZE; ++i) {
-        dist[vec[i]]++;
+    #pragma omp parallel
+    {
+        int dist_private[BINS] = {0};
+        #pragma omp for nowait
+        for(long i = 0; i < VEC_SIZE; ++i) {
+            dist_private[vec[i]]++;
+        }
+        #pragma omp critical 
+        {
+            for (int i = 0; i < BINS; ++i) {
+                dist[i] += dist_private[i];
+            }
+        }
     }
+
     time_end = wall_time();
 
     // Write results

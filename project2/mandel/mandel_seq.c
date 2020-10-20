@@ -20,7 +20,7 @@ int main (int argc, char** argv)
 {
 	png_data* pPng = png_create (IMAGE_WIDTH, IMAGE_HEIGHT);
 	
-	double x, y, x2, y2, cx, cy;
+	double x, y, x2, y2, cx, cy, zx, zy, z;
 	cy = MIN_Y;
 	
 	double fDeltaX = (MAX_X - MIN_X) / (double) IMAGE_WIDTH;
@@ -31,7 +31,6 @@ int main (int argc, char** argv)
 	
 	long i, j, n;
         
-        n = 0;
 	// do the calculation
 	for (j = 0; j < IMAGE_HEIGHT; j++)
 	{
@@ -46,10 +45,26 @@ int main (int argc, char** argv)
 			// count the iterations until the orbit leaves the circle |z|=2.
 			// stop if the number of iterations exceeds the bound MAX_ITERS.
 		        // >>>>>>>> CODE IS MISSING
-
+			n = 0;
+			zx = 0;
+			zy = 0;
+			z = zx*zx + zy*zy;
+			while (n < MAX_ITERS && z < 4)
+			{
+				// calculate next Z
+				zx = zx*zx - zy*zy + x;
+				zy = 2*zx*zy + y;
+				
+				// calculate next |Z|
+				z = zx*zx + zy*zy;
+				n += 1 ;  
+			}
                         // <<<<<<<< CODE IS NISSING
                         // n indicates if the point belongs to the mandelbrot set
 			// plot the number of iterations at point (i, j)
+
+			nTotalIterationsCount += n;
+
 			int c = ((long) n * 255) / MAX_ITERS;
 			png_plot (pPng, i, j, c, c, c);
 			cx += fDeltaX;

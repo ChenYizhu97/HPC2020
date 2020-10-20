@@ -14,9 +14,9 @@ int main ( int argc, char *argv[] ) {
 
     double time_start = wall_time();
     // TODO: YOU NEED TO PARALLELIZE THIS LOOP
+    #pragma omp parallel for
     for (n = 0; n <= N; ++n) {
-	opt[n] = Sn;
-	Sn *= up;
+        opt[n] = Sn * pow(up,n);
     }
     printf("Parallel RunTime   :  %f seconds\n", wall_time()- time_start);
     printf("Final Result Sn    :  %.17g \n", Sn );
