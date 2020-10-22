@@ -35,6 +35,7 @@ int main (int argc, char** argv)
 	for (j = 0; j < IMAGE_HEIGHT; j++)
 	{
 		cx = MIN_X;
+		#pragma omp parallel for reduction(+:nTotalIterationCount) lastprivate(cx) firstprivate(x, y, cx, cy, n, zx, zy, z)
 		for (i = 0; i < IMAGE_WIDTH; i++)
 		{
 			x = cx;
