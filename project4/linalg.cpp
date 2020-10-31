@@ -53,7 +53,7 @@ void cg_init(int nx)
 double hpc_dot(Field const& x, Field const& y, const int N)
 {
     double result = 0;
-
+    # pragma omp parallel for reduction(+:result)
     for (int i = 0; i < N; i++)
         result += x[i] * y[i];
 
@@ -67,6 +67,7 @@ double hpc_norm2(Field const& x, const int N)
     double result = 0;
 
     //TODO
+    # pragma omp parallel for reduction(+:result)
     for (int i = 0; i < N; i++)
         result += x[i] * x[i];
 
@@ -79,6 +80,7 @@ double hpc_norm2(Field const& x, const int N)
 void hpc_fill(Field& x, const double value, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for (int i = 0; i < N; i++)
         x[i] = value;
 }
@@ -93,6 +95,7 @@ void hpc_fill(Field& x, const double value, const int N)
 void hpc_axpy(Field& y, const double alpha, Field const& x, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for (int i = 0; i < N; i++)
         y[i] = alpha * x[i] + y[i];
 }
@@ -104,6 +107,7 @@ void hpc_add_scaled_diff(Field& y, Field const& x, const double alpha,
     Field const& l, Field const& r, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for (int i = 0; i < N; i++)
         y[i] = x[i] + alpha * (l[i] - r[i]);
 }
@@ -115,6 +119,7 @@ void hpc_scaled_diff(Field& y, const double alpha,
     Field const& l, Field const& r, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for (int i = 0; i < N; i++)
         y[i] = alpha * (l[i] - r[i]);
 }
@@ -125,6 +130,7 @@ void hpc_scaled_diff(Field& y, const double alpha,
 void hpc_scale(Field& y, const double alpha, Field& x, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for (int i = 0; i < N; i++)
         y[i] = alpha * x[i];
 }
@@ -136,6 +142,7 @@ void hpc_lcomb(Field& y, const double alpha, Field& x, const double beta,
     Field const& z, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for (int i = 0; i < N; i++)
         y[i] = alpha * x[i] + beta * z[i];
 }
@@ -145,6 +152,7 @@ void hpc_lcomb(Field& y, const double alpha, Field& x, const double beta,
 void hpc_copy(Field& y, Field const& x, const int N)
 {
     //TODO
+    # pragma omp parallel for
     for(int i = 0; i < N; i++)
         y[i] = x[i];
 }
